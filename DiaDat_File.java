@@ -1,6 +1,8 @@
 package diaDat;
 
 import java.io.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 import util.Util;
@@ -37,56 +39,6 @@ class LineData
     }
     int id;
     String value;
-}
-
-class ChannelData
-{
-    String chName;
-    String chDesc;
-    String unit;
-    String mode;
-    String dataFileName;
-    String dataFileMode;
-    String dataType;
-    int dataIdx;
-    int blockLength;
-    int numOfRecord;
-    double offset;
-    double factor;
-    double min;
-    double max;
-    void reinit()
-    {
-        chName = "";
-        chDesc = "";
-        unit = "";
-        mode = "";
-        dataFileName = "";
-        dataFileMode = "";
-        dataType = "";
-        dataIdx = -1;
-        numOfRecord = -1;
-        blockLength = -1;
-    }
-    boolean isEmpty()
-    {
-        return  (chName.isEmpty() &&
-                 chDesc.isEmpty() &&
-                 unit.isEmpty() &&
-                 mode.isEmpty() &&
-                 dataFileName.isEmpty() &&
-                 dataFileMode.isEmpty() &&
-                 dataType.isEmpty() &&
-                 (dataIdx == -1) &&
-                 (numOfRecord == -1) &&
-                 (blockLength == -1) &&
-                 true);
-    }
-    boolean isValid()
-    {
-        return (!chName.isEmpty() &&
-                true);
-    }
 }
 
 public class DiaDat_File
@@ -254,26 +206,47 @@ public class DiaDat_File
         }
         fin.close();
         dir = DiaDat_Direction.e_DiaDat_Dir_Read;
+        step();
     }
     public DiaDat_Direction getDir()
     {
         return dir;
     }
-    void addChannel(ChannelData chData)
+    void addChannel(ChannelData chData) throws Exception
     {
+        if (numOfRecords < 0)
+        { // first channel
+            numOfRecords = chData.numOfRecord;
+            if (numOfRecords < 1)
+                throw new Exception(Util.sprintf("Invalid record number of channel %s (%d)!", chData.chName, chData.numOfRecord));
+        }else
+        { // further records
+            if (numOfRecords != chData.numOfRecord)
+                throw new Exception(Util.sprintf("Invalid record number of channel %s (%d <-> %d)!", chData.chName, numOfRecords, chData.numOfRecord));
+        }
         if (chData.mode.equals("EXPLICIT"))
         {
             DiaDat_DataFile dataFile = dataFiles.get(chData.dataFileName);
             if (dataFile == null)
             {
-                dataFile = new DiaDat_DataFile(chData.dataFileName);
+                dataFile = new DiaDat_DataFile(this, chData.dataFileName);
                 dataFiles.put(chData.dataFileName, dataFile);
             }
+            dataFile.addChannel(chData);
         }else
         {
             
         }
     }
+    public void step()
+    {
+        Collection<DiaDat_DataFile> res = dataFiles.values();
+        Iterator<DiaDat_DataFile> i = res.iterator();
+        while (i.hasNext()) {
+           ((DiaDat_DataFile)i.next()).step();
+        }
+    }
     DiaDat_Direction dir;
     TreeMap<String, DiaDat_DataFile> dataFiles;
+    int numOfRecords = -1;
 }
