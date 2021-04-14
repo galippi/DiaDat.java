@@ -1,6 +1,7 @@
 package diaDat;
 
 import java.io.*;
+import java.util.TreeMap;
 
 import util.Util;
 
@@ -26,6 +27,14 @@ class LineData
         value = line.substring(pos + 1);
         //System.out.println("LineData line="+line+" id="+id+" value="+value);
     }
+    int getValueInt()
+    {
+        return Integer.parseInt(value);
+    }
+    double getValueDouble()
+    {
+        return Double.parseDouble(value);
+    }
     int id;
     String value;
 }
@@ -40,6 +49,7 @@ class ChannelData
     String dataFileMode;
     String dataType;
     int dataIdx;
+    int blockLength;
     int numOfRecord;
     double offset;
     double factor;
@@ -56,6 +66,7 @@ class ChannelData
         dataType = "";
         dataIdx = -1;
         numOfRecord = -1;
+        blockLength = -1;
     }
     boolean isEmpty()
     {
@@ -65,11 +76,16 @@ class ChannelData
                  mode.isEmpty() &&
                  dataFileName.isEmpty() &&
                  dataFileMode.isEmpty() &&
-                 dataType.isEmpty());
+                 dataType.isEmpty() &&
+                 (dataIdx == -1) &&
+                 (numOfRecord == -1) &&
+                 (blockLength == -1) &&
+                 true);
     }
     boolean isValid()
     {
-        return true;
+        return (!chName.isEmpty() &&
+                true);
     }
 }
 
@@ -78,13 +94,16 @@ public class DiaDat_File
     public DiaDat_File()
     {
         dir = DiaDat_Direction.e_DiaDat_Dir_None;
+        dataFiles = new TreeMap<String, DiaDat_DataFile>();
     }
     public DiaDat_File(String filename) throws Exception
     {
+        dataFiles = new TreeMap<String, DiaDat_DataFile>();
         open(filename);
     }
     public void open(String filename) throws Exception
     {
+        dataFiles = new TreeMap<String, DiaDat_DataFile>();
         BufferedReader fin = new BufferedReader(new FileReader(filename));
         String line;
         int lineNum = 0;
@@ -159,38 +178,66 @@ public class DiaDat_File
                                 chData.chDesc = ld.value;
                                 break;
                             case 202:
+                                chData.unit = ld.value;
                                 break;
                             case 210:
+                                chData.mode = ld.value;
+                                if ((!chData.mode.equals("IMPLICIT")) && (!chData.mode.equals("EXPLICIT")))
+                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 210=%s!", lineNum, filename, ld.value));
                                 break;
                             case 211:
                                 chData.dataFileName = ld.value;
                                 break;
                             case 213:
                                 chData.dataFileMode = ld.value;
+                                if (!chData.dataFileMode.equals("BLOCK"))
+                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 213=%s!", lineNum, filename, ld.value));
                                 break;
                             case 214:
+                                chData.dataType = ld.value;
                                 break;
                             case 220:
+                                chData.numOfRecord = ld.getValueInt();
                                 break;
                             case 221:
+                                chData.dataIdx = ld.getValueInt();
                                 break;
                             case 222:
+                                chData.blockLength = ld.getValueInt();
                                 break;
                             case 240:
+                                chData.offset = ld.getValueDouble();
                                 break;
                             case 241:
+                                chData.factor = ld.getValueDouble();
                                 break;
                             case 250:
+                                chData.min = ld.getValueDouble();
                                 break;
                             case 251:
+                                chData.max = ld.getValueDouble();
                                 break;
                             case 252:
+                                if (!ld.value.equals("No"))
+                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 252=%s != No!", lineNum, filename, ld.value));
                                 break;
                             case 253:
+                                if (((chData.mode.equals("IMPLICIT")) && ld.value.equals("increasing")) ||
+                                    ((chData.mode.equals("EXPLICIT")) && ld.value.equals("not monotone")))
+                                    { // value is valid
+                                    }else 
+                                        throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 253=%s != not monotone!", lineNum, filename, ld.value));
                                 break;
                             case 260:
+                                if (((chData.mode.equals("IMPLICIT")) && ld.value.equals("Time")) ||
+                                    ((chData.mode.equals("EXPLICIT")) && ld.value.equals("Numeric")))
+                                { // value is valid
+                                }else 
+                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 260=%s != Numeric!", lineNum, filename, ld.value));
                                 break;
                             case 264:
+                                if (!chData.dataType.equals(ld.value))
+                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 264=%s != %s!", lineNum, filename, ld.value, chData.dataType));
                                 break;
                             case 300:
                                 break;
@@ -205,6 +252,7 @@ public class DiaDat_File
                     break;
             }
         }
+        fin.close();
         dir = DiaDat_Direction.e_DiaDat_Dir_Read;
     }
     public DiaDat_Direction getDir()
@@ -213,7 +261,19 @@ public class DiaDat_File
     }
     void addChannel(ChannelData chData)
     {
-        
+        if (chData.mode.equals("EXPLICIT"))
+        {
+            DiaDat_DataFile dataFile = dataFiles.get(chData.dataFileName);
+            if (dataFile == null)
+            {
+                dataFile = new DiaDat_DataFile(chData.dataFileName);
+                dataFiles.put(chData.dataFileName, dataFile);
+            }
+        }else
+        {
+            
+        }
     }
     DiaDat_Direction dir;
+    TreeMap<String, DiaDat_DataFile> dataFiles;
 }
