@@ -24,6 +24,12 @@ public class DataFileReaderBase
         return ((int)record[idx] & 0xFF);
     }
 
+    int get_u16(int idx)
+    {
+        return ((int)record[idx] & 0xFF) + 
+              (((int)record[idx + 1] & 0xFF) * 256);
+    }
+
     FileInputStream fin;
     int recordSize;
     byte[] record;

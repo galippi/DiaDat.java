@@ -6,7 +6,7 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     {
         set(_parent, chData);
         type = DataTypes.get(chData.dataType);
-        chIdx = chData.dataIdx;
+        chIdx = chData.dataIdx - 1;
     }
 
     @Override
@@ -26,7 +26,12 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     public int getValueRaw() throws Exception
     {
         DiaDat_DataFile p = (DiaDat_DataFile)parent;
-        return p.fin.get_u8(chIdx);
+        if (type.size == 1)
+            return p.fin.get_u8(chIdx);
+        else if (type.size == 2)
+            return p.fin.get_u16(chIdx * 2);
+        else
+            throw new Exception("DiaDat_Channel.getValueRaw: Not yet implemented function for channel " + name + "!");
     }
 
     @Override
