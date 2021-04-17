@@ -16,9 +16,16 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     }
 
     @Override
-    double getValueDouble() throws Exception
+    public double getValueDouble() throws Exception
     {
         throw new Exception("DiaDat_Channel.getValueDouble: Not yet implemented function for channel " + name + "!");
+    }
+
+    @Override
+    public int getValueRaw() throws Exception
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     DataType type;

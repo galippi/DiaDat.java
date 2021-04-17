@@ -19,14 +19,14 @@ public class DiaDat_ChannelImplicit extends DiaDat_ChannelBase
         if (recordIdx < 0)
         { // first step
             recordIdx = 0;
-        }
-        recordIdx++;
+        }else
+            recordIdx++;
     }
 
     @Override
-    double getValueDouble()
+    public int getValueRaw() throws Exception
     {
-        return recordIdx * factor + offset;
+        return recordIdx;
     }
 
     int recordIdx = -1;

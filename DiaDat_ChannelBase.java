@@ -1,9 +1,9 @@
 package diaDat;
 
-abstract class DiaDat_ChannelBase
+abstract public class DiaDat_ChannelBase
 {
     abstract boolean isExplicit();
-    abstract double getValueDouble() throws Exception;
+    public abstract int getValueRaw() throws Exception;
 
     void set(DiaDat_DataFileBase _parent, ChannelData chData)
     {
@@ -16,6 +16,11 @@ abstract class DiaDat_ChannelBase
 
     void step()
     { // do nothing
+    }
+
+    public double getValueDouble() throws Exception
+    {
+        return getValueRaw() * factor + offset;
     }
 
     DiaDat_DataFileBase parent;

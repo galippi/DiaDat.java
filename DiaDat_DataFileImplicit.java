@@ -21,8 +21,7 @@ public class DiaDat_DataFileImplicit extends DiaDat_DataFileBase
     @Override
     public void step()
     {
-        // TODO Auto-generated method stub
-
+        channel.step();
     }
 
     @Override

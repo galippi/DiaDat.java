@@ -241,6 +241,7 @@ public class DiaDat_File
         DiaDat_ChannelBase channel = dataFile.addChannel(chData);
         channels.put(chData.chName, channel);
     }
+
     public void step()
     {
         Collection<DiaDat_DataFileBase> res = dataFiles.values();
@@ -249,6 +250,12 @@ public class DiaDat_File
            ((DiaDat_DataFileBase)i.next()).step();
         }
     }
+
+    public DiaDat_ChannelBase getChannel(String chName)
+    {
+        return channels.get(chName);
+    }
+
     DiaDat_Direction dir;
     TreeMap<String, DiaDat_DataFileBase> dataFiles = new TreeMap<String, DiaDat_DataFileBase>();
     TreeMap<String, DiaDat_ChannelBase> channels = new TreeMap<String, DiaDat_ChannelBase>();
