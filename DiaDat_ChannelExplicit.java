@@ -19,19 +19,34 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     @Override
     public double getValueDouble() throws Exception
     {
-        throw new Exception("DiaDat_Channel.getValueDouble: Not yet implemented function for channel " + name + "!");
+        DiaDat_DataFile p = (DiaDat_DataFile)parent;
+        switch(type.typeId)
+        {
+            case e_DataType_8:
+            case e_DataType_16:
+                return getValueRaw() * factor + offset;
+            case e_DataType_Real32:
+                return p.fin.get_float32(chIdx * type.size);
+            case e_DataType_Real64:
+                return p.fin.get_double64(chIdx * type.size);
+            default:
+                throw new Exception("DiaDat_Channel.getValueDouble: Not yet implemented function for channel " + name + "!");
+        }
     }
 
     @Override
     public int getValueRaw() throws Exception
     {
         DiaDat_DataFile p = (DiaDat_DataFile)parent;
-        if (type.size == 1)
-            return p.fin.get_u8(chIdx);
-        else if (type.size == 2)
-            return p.fin.get_u16(chIdx * 2);
-        else
-            throw new Exception("DiaDat_Channel.getValueRaw: Not yet implemented function for channel " + name + "!");
+        switch(type.typeId)
+        {
+            case e_DataType_8:
+                return p.fin.get_u8(chIdx);
+            case e_DataType_16:
+                return p.fin.get_u16(chIdx * type.size);
+            default:
+                throw new Exception("DiaDat_Channel.getValueRaw: Not yet implemented function for channel " + name + "!");
+        }
     }
 
     @Override

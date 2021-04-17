@@ -69,7 +69,6 @@ public class DiaDat_File
         }
         path = path.toAbsolutePath();
         containerDir = path.getParent();
-        System.out.println("parentDir=" + containerDir.toAbsolutePath());
         BufferedReader fin = new BufferedReader(new FileReader(path.toString()));
         String line;
         int lineNum = 0;

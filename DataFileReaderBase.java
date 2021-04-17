@@ -1,5 +1,7 @@
 package diaDat;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 
 public class DataFileReaderBase
@@ -19,6 +21,11 @@ public class DataFileReaderBase
             throw new Exception("DataFileReaderBase.step: error reading next record!");
     }
 
+    void copyRaw(int idx, byte[] raw)
+    {
+        System.arraycopy(record, idx, raw, 0, raw.length);
+    }
+
     int get_u8(int idx)
     {
         return ((int)record[idx] & 0xFF);
@@ -28,6 +35,28 @@ public class DataFileReaderBase
     {
         return ((int)record[idx] & 0xFF) + 
               (((int)record[idx + 1] & 0xFF) * 256);
+    }
+
+    double get_float32(int idx)
+    {
+        int rawVal = 0;
+        for(int i = 0; i < 4; i++)
+        {
+            rawVal = (rawVal << 8) + get_u8(idx + 3 - i);
+        }
+        return Float.intBitsToFloat(rawVal);
+    }
+
+    double get_double64(int idx)
+    {
+        {
+            long rawVal = 0;
+            for(int i = 0; i < 8; i++)
+            {
+                rawVal = (rawVal << 8) + get_u8(idx + 7 - i);
+            }
+            return Double.longBitsToDouble(rawVal);
+        }
     }
 
     FileInputStream fin;

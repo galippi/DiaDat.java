@@ -40,7 +40,6 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
         if (recordSize < 0)
         {
             recordSize = numOfSignals * dataType.size;
-            System.out.println("name=" + dataFileName + " file size=" + (recordSize * parent.numOfRecords));
             Path path = Paths.get(parent.containerDir.toString(), dataFileName);
             if (Files.size(path) != (recordSize * parent.numOfRecords))
                 throw new Exception(Util.sprintf("DiaDat_DataFile.step: wrong data file size of file %s (%d <-> %d)!", dataFileName, Files.size(Paths.get(dataFileName)), (recordSize * parent.numOfRecords)));
