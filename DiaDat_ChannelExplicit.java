@@ -2,11 +2,24 @@ package diaDat;
 
 public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
 {
-    boolean isExplicit()
+    public DiaDat_ChannelExplicit(DiaDat_DataFileBase _parent, ChannelData chData) throws Exception
     {
-        return true;
+        set(_parent, chData);
+        type = DataTypes.get(chData.dataType);
     }
 
-    DiaDat_DataFile dataFile;
-    int chIdx;
+    @Override
+    boolean isExplicit()
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    double getValueDouble() throws Exception
+    {
+        throw new Exception("DiaDat_Channel.getValueDouble: Not yet implemented function for channel " + name + "!");
+    }
+
+    DataType type;
 }

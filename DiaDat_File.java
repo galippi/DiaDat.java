@@ -46,16 +46,15 @@ public class DiaDat_File
     public DiaDat_File()
     {
         dir = DiaDat_Direction.e_DiaDat_Dir_None;
-        dataFiles = new TreeMap<String, DiaDat_DataFile>();
+        
     }
     public DiaDat_File(String filename) throws Exception
     {
-        dataFiles = new TreeMap<String, DiaDat_DataFile>();
+        super();
         open(filename);
     }
     public void open(String filename) throws Exception
     {
-        dataFiles = new TreeMap<String, DiaDat_DataFile>();
         BufferedReader fin = new BufferedReader(new FileReader(filename));
         String line;
         int lineNum = 0;
@@ -224,29 +223,34 @@ public class DiaDat_File
             if (numOfRecords != chData.numOfRecord)
                 throw new Exception(Util.sprintf("Invalid record number of channel %s (%d <-> %d)!", chData.chName, numOfRecords, chData.numOfRecord));
         }
-        if (chData.mode.equals("EXPLICIT"))
+        if (chData.mode.equals("IMPLICIT"))
         {
-            DiaDat_DataFile dataFile = dataFiles.get(chData.dataFileName);
-            if (dataFile == null)
-            {
-                dataFile = new DiaDat_DataFile(this, chData.dataFileName);
-                dataFiles.put(chData.dataFileName, dataFile);
-            }
-            dataFile.addChannel(chData);
-        }else
-        {
-            
+            if (!chData.dataFileName.isEmpty())
+                throw new Exception(Util.sprintf("Invalid filename of implicit data of channel %s!", chData.chName));
+            chData.dataFileName = "IMPLICIT:";
         }
+        DiaDat_DataFileBase dataFile = dataFiles.get(chData.dataFileName);
+        if (dataFile == null)
+        {
+            if (chData.mode.equals("EXPLICIT"))
+                dataFile = new DiaDat_DataFile(this, chData.dataFileName);
+            else
+                dataFile = new DiaDat_DataFileImplicit(this, chData.dataFileName);
+            dataFiles.put(chData.dataFileName, dataFile);
+        }
+        DiaDat_ChannelBase channel = dataFile.addChannel(chData);
+        channels.put(chData.chName, channel);
     }
     public void step()
     {
-        Collection<DiaDat_DataFile> res = dataFiles.values();
-        Iterator<DiaDat_DataFile> i = res.iterator();
+        Collection<DiaDat_DataFileBase> res = dataFiles.values();
+        Iterator<DiaDat_DataFileBase> i = res.iterator();
         while (i.hasNext()) {
-           ((DiaDat_DataFile)i.next()).step();
+           ((DiaDat_DataFileBase)i.next()).step();
         }
     }
     DiaDat_Direction dir;
-    TreeMap<String, DiaDat_DataFile> dataFiles;
+    TreeMap<String, DiaDat_DataFileBase> dataFiles = new TreeMap<String, DiaDat_DataFileBase>();
+    TreeMap<String, DiaDat_ChannelBase> channels = new TreeMap<String, DiaDat_ChannelBase>();
     int numOfRecords = -1;
 }

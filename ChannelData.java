@@ -2,6 +2,10 @@ package diaDat;
 
 class ChannelData
 {
+    ChannelData()
+    {
+        reinit();
+    }
     String chName;
     String chDesc;
     String unit;
