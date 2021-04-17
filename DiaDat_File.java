@@ -1,6 +1,9 @@
 package diaDat;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeMap;
@@ -48,14 +51,26 @@ public class DiaDat_File
         dir = DiaDat_Direction.e_DiaDat_Dir_None;
         
     }
+
     public DiaDat_File(String filename) throws Exception
     {
         super();
         open(filename);
     }
+
     public void open(String filename) throws Exception
     {
-        BufferedReader fin = new BufferedReader(new FileReader(filename));
+        Path path = Paths.get(filename);
+        if (!Files.exists(path))
+        {
+            path = Paths.get(System.getProperty("user.dir"), filename);
+            if (!Files.exists(path))
+                throw new FileNotFoundException(filename);
+        }
+        path = path.toAbsolutePath();
+        containerDir = path.getParent();
+        System.out.println("parentDir=" + containerDir.toAbsolutePath());
+        BufferedReader fin = new BufferedReader(new FileReader(path.toString()));
         String line;
         int lineNum = 0;
         DiaDat_FileReadState state = DiaDat_FileReadState.e_FileBegin;
@@ -242,7 +257,7 @@ public class DiaDat_File
         channels.put(chData.chName, channel);
     }
 
-    public void step()
+    public void step() throws Exception
     {
         Collection<DiaDat_DataFileBase> res = dataFiles.values();
         Iterator<DiaDat_DataFileBase> i = res.iterator();
@@ -251,11 +266,24 @@ public class DiaDat_File
         }
     }
 
+    public boolean stepIsOk()
+    {
+        try
+        {
+            step();
+            return true;
+        }catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     public DiaDat_ChannelBase getChannel(String chName)
     {
         return channels.get(chName);
     }
 
+    Path containerDir;
     DiaDat_Direction dir;
     TreeMap<String, DiaDat_DataFileBase> dataFiles = new TreeMap<String, DiaDat_DataFileBase>();
     TreeMap<String, DiaDat_ChannelBase> channels = new TreeMap<String, DiaDat_ChannelBase>();

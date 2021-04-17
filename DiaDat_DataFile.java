@@ -1,5 +1,9 @@
 package diaDat;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.TreeMap;
 
 import util.Util;
@@ -31,13 +35,18 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
         return channel;
     }
 
-    public void step()
+    public void step() throws Exception
     {
         if (recordSize < 0)
         {
             recordSize = numOfSignals * dataType.size;
             System.out.println("name=" + dataFileName + " file size=" + (recordSize * parent.numOfRecords));
-        }
+            Path path = Paths.get(parent.containerDir.toString(), dataFileName);
+            if (Files.size(path) != (recordSize * parent.numOfRecords))
+                throw new Exception(Util.sprintf("DiaDat_DataFile.step: wrong data file size of file %s (%d <-> %d)!", dataFileName, Files.size(Paths.get(dataFileName)), (recordSize * parent.numOfRecords)));
+            fin = new DataFileReaderBase(path.toString(), recordSize);
+        }else
+            fin.step();
     }
 
     @Override
@@ -51,4 +60,5 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
     int numOfSignals;
     DataType dataType;
     int recordSize = -1;
+    DataFileReaderBase fin;
 }

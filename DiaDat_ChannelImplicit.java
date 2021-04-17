@@ -29,5 +29,11 @@ public class DiaDat_ChannelImplicit extends DiaDat_ChannelBase
         return recordIdx;
     }
 
+    @Override
+    public int getLength()
+    {
+        return parent.parent.numOfRecords;
+    }
+
     int recordIdx = -1;
 }

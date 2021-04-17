@@ -3,7 +3,8 @@ package diaDat;
 abstract public class DiaDat_ChannelBase
 {
     abstract boolean isExplicit();
-    public abstract int getValueRaw() throws Exception;
+    abstract public int getValueRaw() throws Exception;
+    abstract public int getLength();
 
     void set(DiaDat_DataFileBase _parent, ChannelData chData)
     {

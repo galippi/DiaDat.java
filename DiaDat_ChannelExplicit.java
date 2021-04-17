@@ -6,6 +6,7 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     {
         set(_parent, chData);
         type = DataTypes.get(chData.dataType);
+        chIdx = chData.dataIdx;
     }
 
     @Override
@@ -24,9 +25,16 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     @Override
     public int getValueRaw() throws Exception
     {
-        // TODO Auto-generated method stub
-        return 0;
+        DiaDat_DataFile p = (DiaDat_DataFile)parent;
+        return p.fin.get_u8(chIdx);
+    }
+
+    @Override
+    public int getLength()
+    {
+        return parent.parent.numOfRecords;
     }
 
     DataType type;
+    int chIdx;
 }
