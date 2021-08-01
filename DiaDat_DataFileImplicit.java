@@ -30,5 +30,11 @@ public class DiaDat_DataFileImplicit extends DiaDat_DataFileBase
         return channel;
     }
 
+    @Override
+    public void seek(int recordIdx) throws Exception
+    {
+        throw new Exception("DiaDat_DataFileImplicit.seek: not yet implemented of file!");
+    }
+
     DiaDat_ChannelBase channel;
 }

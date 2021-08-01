@@ -49,6 +49,12 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
     }
 
     @Override
+    public void seek(int recordIdx) throws Exception
+    {
+        throw new Exception(Util.sprintf("DiaDat_DataFile.seek: not yet implemented of file %s!", dataFileName));
+    }
+
+    @Override
     public DiaDat_ChannelBase getChannel(String chName) throws Exception
     {
         return null;

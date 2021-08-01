@@ -60,7 +60,7 @@ public class DiaDat_File
 
     public void open(String filename) throws Exception
     {
-        Path path = Paths.get(filename);
+        path = Paths.get(filename);
         if (!Files.exists(path))
         {
             path = Paths.get(System.getProperty("user.dir"), filename);
@@ -277,11 +277,33 @@ public class DiaDat_File
         }
     }
 
+    public String getName()
+    {
+        return path.toString();
+    }
+
+    public int getLength() throws Exception
+    {
+        if (numOfRecords <= 0)
+            throw new Exception(Util.sprintf("Invalid record number of file %s!", getName()));
+        return numOfRecords;
+    }
+
+    public void seek(int recordIdx) throws Exception
+    {
+        Collection<DiaDat_DataFileBase> res = dataFiles.values();
+        Iterator<DiaDat_DataFileBase> i = res.iterator();
+        while (i.hasNext()) {
+           ((DiaDat_DataFileBase)i.next()).seek(recordIdx);
+        }
+    }
+
     public DiaDat_ChannelBase getChannel(String chName)
     {
         return channels.get(chName);
     }
 
+    Path path;
     Path containerDir;
     DiaDat_Direction dir;
     TreeMap<String, DiaDat_DataFileBase> dataFiles = new TreeMap<String, DiaDat_DataFileBase>();
