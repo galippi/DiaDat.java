@@ -102,12 +102,15 @@ public class DiaDat_File
                         switch(ld.id)
                         {
                             case 1:
+                            case 2:
                             case 101:
                             case 102:
                             case 103:
                             case 104:
                             case 105:
                             case 106:
+                            case 111:
+                            case 112:
                                 break;
                             default:
                                 throw new Exception(Util.sprintf("Invalid line content in line %d (%s)!", lineNum, line));
@@ -183,7 +186,7 @@ public class DiaDat_File
                                 chData.max = ld.getValueDouble();
                                 break;
                             case 252:
-                                if (!ld.value.equals("No"))
+                                if (ld.value.compareToIgnoreCase("No") != 0)
                                     throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 252=%s != No!", lineNum, filename, ld.value));
                                 break;
                             case 253:
@@ -301,6 +304,27 @@ public class DiaDat_File
     public DiaDat_ChannelBase getChannel(String chName)
     {
         return channels.get(chName);
+    }
+
+    Iterator<DiaDat_ChannelBase> chIterator = null;
+    public void getChannelInit()
+    {
+        Collection<DiaDat_ChannelBase> res = channels.values();
+        chIterator = res.iterator();
+    }
+    public DiaDat_ChannelBase getChannelFirst()
+    {
+        getChannelInit();
+        return getChannelNext();
+    }
+    public DiaDat_ChannelBase getChannelNext()
+    {
+        DiaDat_ChannelBase ch = null;
+        if (chIterator.hasNext()) {
+            ch = chIterator.next();
+        }else
+            chIterator = null;
+        return ch;
     }
 
     Path path;
