@@ -18,6 +18,7 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
         numOfSignals = 0;
     }
 
+    static boolean indexCheckIsEnabled = false;
     public DiaDat_ChannelBase addChannel(ChannelData chData) throws Exception
     {
         if (channels.containsKey(chData.chName))
@@ -28,7 +29,7 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
             if (!dataType.name.equals(chData.dataType))
                 throw new Exception(Util.sprintf("DiaDat_DataFile.addChannel: wrong datatype (%s <-> %s) (channel=%s dataFileName=%s)!", dataType.name, chData.dataType, chData.chName, dataFileName));
         numOfSignals++;
-        if (chData.dataIdx != numOfSignals)
+        if (indexCheckIsEnabled && (chData.dataIdx != numOfSignals))
             throw new Exception(Util.sprintf("DiaDat_DataFile.addChannel: wrong dataIdx (%d <-> %d) (channel=%s dataFileName=%s)!", chData.dataIdx, numOfSignals, chData.chName, dataFileName));
         DiaDat_ChannelBase channel = new DiaDat_ChannelExplicit(this, chData);
         channels.put(chData.chName, channel);
