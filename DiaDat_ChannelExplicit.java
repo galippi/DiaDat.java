@@ -22,8 +22,8 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
         DiaDat_DataFile p = (DiaDat_DataFile)parent;
         switch(type.typeId)
         {
-            case e_DataType_8:
-            case e_DataType_16:
+            case e_DataType_u8:
+            case e_DataType_u16:
                 return getValueRaw() * factor + offset;
             case e_DataType_Real32:
                 return p.fin.get_float32(chIdx * type.size);
@@ -40,9 +40,9 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
         DiaDat_DataFile p = (DiaDat_DataFile)parent;
         switch(type.typeId)
         {
-            case e_DataType_8:
+            case e_DataType_u8:
                 return p.fin.get_u8(chIdx);
-            case e_DataType_16:
+            case e_DataType_u16:
                 return p.fin.get_u16(chIdx * type.size);
             default:
                 throw new Exception("DiaDat_Channel.getValueRaw: Not yet implemented function for channel " + name + "!");
