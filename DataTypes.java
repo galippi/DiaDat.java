@@ -8,7 +8,9 @@ enum DataTypesEnum
 {
     e_DataType_u8,
     e_DataType_u16,
+    e_DataType_i16,
     e_DataType_u32,
+    e_DataType_i32,
     e_DataType_Real32,
     e_DataType_Real64,
 }
@@ -19,9 +21,11 @@ public class DataTypes
     {
         names = new TreeMap<String, DataType>();
         enums = new TreeMap<DataTypesEnum, DataType>();
-        add("WORD8", DataTypesEnum.e_DataType_u8, 1);
+        add("WORD8",  DataTypesEnum.e_DataType_u8, 1);
         add("WORD16", DataTypesEnum.e_DataType_u16, 2);
+        add("INT16",  DataTypesEnum.e_DataType_i16, 2);
         add("WORD32", DataTypesEnum.e_DataType_u32, 4);
+        add("INT32",  DataTypesEnum.e_DataType_i32, 4);
         add("REAL32", DataTypesEnum.e_DataType_Real32, 4);
         add("REAL64", DataTypesEnum.e_DataType_Real64, 8);
     }
