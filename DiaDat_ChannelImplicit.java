@@ -2,7 +2,7 @@ package diaDat;
 
 public class DiaDat_ChannelImplicit extends DiaDat_ChannelBase
 {
-    public DiaDat_ChannelImplicit(DiaDat_DataFileBase _parent, ChannelData chData)
+    public DiaDat_ChannelImplicit(DiaDat_DataFileBase _parent, ChannelData chData) throws Exception
     {
         set(_parent, chData);
     }

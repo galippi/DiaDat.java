@@ -6,13 +6,14 @@ abstract public class DiaDat_ChannelBase
     abstract public int getValueRaw() throws Exception;
     abstract public int getLength();
 
-    void set(DiaDat_DataFileBase _parent, ChannelData chData)
+    void set(DiaDat_DataFileBase _parent, ChannelData chData) throws Exception
     {
         parent = _parent;
         name = chData.chName;
         unit = chData.unit;
         offset = chData.offset;
         factor = chData.factor;
+        type = DataTypes.get(chData.dataType).typeId;
     }
 
     void step()
@@ -24,6 +25,11 @@ abstract public class DiaDat_ChannelBase
         return getValueRaw() * factor + offset;
     }
 
+    public DataTypesEnum getType()
+    {
+        return type;
+    }
+
     DiaDat_DataFileBase parent;
     String name;
     String unit;
@@ -33,4 +39,5 @@ abstract public class DiaDat_ChannelBase
     double offset;
     //double min;
     //double max;
+    DataTypesEnum type;
 }
