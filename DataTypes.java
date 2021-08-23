@@ -4,17 +4,6 @@ import java.util.TreeMap;
 
 import util.Util;
 
-enum DataTypesEnum
-{
-    e_DataType_u8,
-    e_DataType_u16,
-    e_DataType_i16,
-    e_DataType_u32,
-    e_DataType_i32,
-    e_DataType_Real32,
-    e_DataType_Real64,
-}
-
 public class DataTypes
 {
     static
