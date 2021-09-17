@@ -30,6 +30,11 @@ abstract public class DiaDat_ChannelBase
         return type;
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
     DiaDat_DataFileBase parent;
     String name;
     String unit;
