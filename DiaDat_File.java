@@ -327,6 +327,21 @@ public class DiaDat_File
         return ch;
     }
 
+    public int getChannelNumber() {
+        return channels.size();
+    }
+
+    public DiaDat_ChannelBase getChannel(int i) {
+        // TODO to be optimized
+        getChannelInit();
+        while (i != 0)
+        {
+            getChannelNext();
+            i--;
+        }
+        return getChannelNext();
+    }
+
     Path path;
     Path containerDir;
     DiaDat_Direction dir;
