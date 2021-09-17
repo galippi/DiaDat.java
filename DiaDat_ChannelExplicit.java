@@ -10,10 +10,9 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
     }
 
     @Override
-    boolean isExplicit()
+    public boolean isExplicit()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override

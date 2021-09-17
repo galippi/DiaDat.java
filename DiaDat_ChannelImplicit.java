@@ -8,7 +8,7 @@ public class DiaDat_ChannelImplicit extends DiaDat_ChannelBase
     }
 
     @Override
-    boolean isExplicit()
+    public boolean isExplicit()
     {
         return false;
     }

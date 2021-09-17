@@ -2,7 +2,7 @@ package diaDat;
 
 abstract public class DiaDat_ChannelBase
 {
-    abstract boolean isExplicit();
+    public abstract boolean isExplicit();
     abstract public int getValueRaw() throws Exception;
     abstract public int getLength();
 
