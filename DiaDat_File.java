@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import util.Util;
+import utils.Sprintf;
 
 enum DiaDat_FileReadState
 {
@@ -26,7 +26,7 @@ class LineData
         //System.out.println("LineData line="+line);
         int pos = line.indexOf(',');
         if (pos < 0)
-            throw new Exception(Util.sprintf("Invalid LineData - no comma in line %s", line));
+            throw new Exception(Sprintf.sprintf("Invalid LineData - no comma in line %s", line));
         String idStr = line.substring(0, pos).trim();
         id = Integer.parseInt(idStr);
         value = line.substring(pos + 1);
@@ -113,7 +113,7 @@ public class DiaDat_File
                             case 112:
                                 break;
                             default:
-                                throw new Exception(Util.sprintf("Invalid line content in line %d (%s)!", lineNum, line));
+                                throw new Exception(Sprintf.sprintf("Invalid line content in line %d (%s)!", lineNum, line));
                         }
                     }
                     break;
@@ -129,7 +129,7 @@ public class DiaDat_File
                         if (!chData.isEmpty())
                         {
                             if (!chData.isValid())
-                                throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s!", lineNum, filename));
+                                throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s!", lineNum, filename));
                             addChannel(chData);
                             chData.reinit();
                         }
@@ -151,7 +151,7 @@ public class DiaDat_File
                             case 210:
                                 chData.mode = ld.value;
                                 if ((!chData.mode.equals("IMPLICIT")) && (!chData.mode.equals("EXPLICIT")))
-                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 210=%s!", lineNum, filename, ld.value));
+                                    throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s 210=%s!", lineNum, filename, ld.value));
                                 break;
                             case 211:
                                 chData.dataFileName = ld.value;
@@ -159,7 +159,7 @@ public class DiaDat_File
                             case 213:
                                 chData.dataFileMode = ld.value;
                                 if (!chData.dataFileMode.equals("BLOCK"))
-                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 213=%s!", lineNum, filename, ld.value));
+                                    throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s 213=%s!", lineNum, filename, ld.value));
                                 break;
                             case 214:
                                 chData.dataType = ld.value;
@@ -187,32 +187,32 @@ public class DiaDat_File
                                 break;
                             case 252:
                                 if (ld.value.compareToIgnoreCase("No") != 0)
-                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 252=%s != No!", lineNum, filename, ld.value));
+                                    throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s 252=%s != No!", lineNum, filename, ld.value));
                                 break;
                             case 253:
                                 if (((chData.mode.equals("IMPLICIT")) && ld.value.equals("increasing")) ||
                                     ((chData.mode.equals("EXPLICIT")) && ld.value.equals("not monotone")))
                                     { // value is valid
                                     }else 
-                                        throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 253=%s != not monotone!", lineNum, filename, ld.value));
+                                        throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s 253=%s != not monotone!", lineNum, filename, ld.value));
                                 break;
                             case 260:
                                 if (((chData.mode.equals("IMPLICIT")) && ld.value.equals("Time")) ||
                                     ((chData.mode.equals("EXPLICIT")) && ld.value.equals("Numeric")))
                                 { // value is valid
                                 }else 
-                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 260=%s != Numeric!", lineNum, filename, ld.value));
+                                    throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s 260=%s != Numeric!", lineNum, filename, ld.value));
                                 break;
                             case 264:
                                 if (!chData.dataType.equals(ld.value))
-                                    throw new Exception(Util.sprintf("Invalid channel content in line %d in file %s 264=%s != %s!", lineNum, filename, ld.value, chData.dataType));
+                                    throw new Exception(Sprintf.sprintf("Invalid channel content in line %d in file %s 264=%s != %s!", lineNum, filename, ld.value, chData.dataType));
                                 break;
                             case 300:
                                 break;
                             case 301:
                                 break;
                             default:
-                                throw new Exception(Util.sprintf("Invalid line content in line %d (%s)!", lineNum, line));
+                                throw new Exception(Sprintf.sprintf("Invalid line content in line %d (%s)!", lineNum, line));
                         }
                     }
                     break;
@@ -234,16 +234,16 @@ public class DiaDat_File
         { // first channel
             numOfRecords = chData.numOfRecord;
             if (numOfRecords < 1)
-                throw new Exception(Util.sprintf("Invalid record number of channel %s (%d)!", chData.chName, chData.numOfRecord));
+                throw new Exception(Sprintf.sprintf("Invalid record number of channel %s (%d)!", chData.chName, chData.numOfRecord));
         }else
         { // further records
             if (numOfRecords != chData.numOfRecord)
-                throw new Exception(Util.sprintf("Invalid record number of channel %s (%d <-> %d)!", chData.chName, numOfRecords, chData.numOfRecord));
+                throw new Exception(Sprintf.sprintf("Invalid record number of channel %s (%d <-> %d)!", chData.chName, numOfRecords, chData.numOfRecord));
         }
         if (chData.mode.equals("IMPLICIT"))
         {
             if (!chData.dataFileName.isEmpty())
-                throw new Exception(Util.sprintf("Invalid filename of implicit data of channel %s!", chData.chName));
+                throw new Exception(Sprintf.sprintf("Invalid filename of implicit data of channel %s!", chData.chName));
             chData.dataFileName = "IMPLICIT:";
         }
         DiaDat_DataFileBase dataFile = dataFiles.get(chData.dataFileName);
@@ -288,7 +288,7 @@ public class DiaDat_File
     public int getLength() throws Exception
     {
         if (numOfRecords <= 0)
-            throw new Exception(Util.sprintf("Invalid record number of file %s!", getName()));
+            throw new Exception(Sprintf.sprintf("Invalid record number of file %s!", getName()));
         return numOfRecords;
     }
 

@@ -2,7 +2,7 @@ package diaDat;
 
 import java.util.TreeMap;
 
-import util.Util;
+import utils.Sprintf;
 
 public class DataTypes
 {
@@ -28,14 +28,14 @@ public class DataTypes
     {
         DataType type = names.get(name);
         if (type == null)
-            throw new Exception(Util.sprintf("DataTypes.get: invalid type name %s!", name));
+            throw new Exception(Sprintf.sprintf("DataTypes.get: invalid type name %s!", name));
         return type;
     }
     public static DataType get(DataTypesEnum typeId) throws Exception
     {
         DataType type = enums.get(typeId);
         if (type == null)
-            throw new Exception(Util.sprintf("DataTypes.get: invalid type id %s!", typeId));
+            throw new Exception(Sprintf.sprintf("DataTypes.get: invalid type id %s!", typeId));
         return type;
     }
     static TreeMap<String, DataType> names;

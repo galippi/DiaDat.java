@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.TreeMap;
 
-import util.Util;
+import utils.Sprintf;
 
 public class DiaDat_DataFile extends DiaDat_DataFileBase
 {
@@ -22,15 +22,15 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
     public DiaDat_ChannelBase addChannel(ChannelData chData) throws Exception
     {
         if (channels.containsKey(chData.chName))
-            throw new Exception(Util.sprintf("DiaDat_DataFile.addChannel: dupplicated channel %s (dataFileName=%s)!", chData.chName, dataFileName));
+            throw new Exception(Sprintf.sprintf("DiaDat_DataFile.addChannel: dupplicated channel %s (dataFileName=%s)!", chData.chName, dataFileName));
         if (numOfSignals == 0)
             dataType = DataTypes.get(chData.dataType);
         else
             if (!dataType.name.equals(chData.dataType))
-                throw new Exception(Util.sprintf("DiaDat_DataFile.addChannel: wrong datatype (%s <-> %s) (channel=%s dataFileName=%s)!", dataType.name, chData.dataType, chData.chName, dataFileName));
+                throw new Exception(Sprintf.sprintf("DiaDat_DataFile.addChannel: wrong datatype (%s <-> %s) (channel=%s dataFileName=%s)!", dataType.name, chData.dataType, chData.chName, dataFileName));
         numOfSignals++;
         if (indexCheckIsEnabled && (chData.dataIdx != numOfSignals))
-            throw new Exception(Util.sprintf("DiaDat_DataFile.addChannel: wrong dataIdx (%d <-> %d) (channel=%s dataFileName=%s)!", chData.dataIdx, numOfSignals, chData.chName, dataFileName));
+            throw new Exception(Sprintf.sprintf("DiaDat_DataFile.addChannel: wrong dataIdx (%d <-> %d) (channel=%s dataFileName=%s)!", chData.dataIdx, numOfSignals, chData.chName, dataFileName));
         DiaDat_ChannelBase channel = new DiaDat_ChannelExplicit(this, chData);
         channels.put(chData.chName, channel);
         return channel;
@@ -43,7 +43,7 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
             recordSize = numOfSignals * dataType.size;
             Path path = Paths.get(parent.containerDir.toString(), dataFileName);
             if (Files.size(path) != (recordSize * parent.numOfRecords))
-                throw new Exception(Util.sprintf("DiaDat_DataFile.step: wrong data file size of file %s (%d <-> %d)!", dataFileName, Files.size(Paths.get(dataFileName)), (recordSize * parent.numOfRecords)));
+                throw new Exception(Sprintf.sprintf("DiaDat_DataFile.step: wrong data file size of file %s (%d <-> %d)!", dataFileName, Files.size(Paths.get(dataFileName)), (recordSize * parent.numOfRecords)));
             fin = new DataFileReaderBase(path.toString(), recordSize);
         }else
             fin.step();
@@ -52,7 +52,7 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
     @Override
     public void seek(int recordIdx) throws Exception
     {
-        throw new Exception(Util.sprintf("DiaDat_DataFile.seek: not yet implemented of file %s!", dataFileName));
+        throw new Exception(Sprintf.sprintf("DiaDat_DataFile.seek: not yet implemented of file %s!", dataFileName));
     }
 
     @Override

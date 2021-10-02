@@ -1,6 +1,6 @@
 package diaDat;
 
-import util.Util;
+import utils.Sprintf;
 
 public class DiaDat_DataFileImplicit extends DiaDat_DataFileBase
 {
@@ -13,7 +13,7 @@ public class DiaDat_DataFileImplicit extends DiaDat_DataFileBase
     public DiaDat_ChannelBase addChannel(ChannelData chData) throws Exception
     {
         if (channel != null)
-            throw new Exception(Util.sprintf("DiaDat_DataFileImplicit.addChannel: dupplicated implicit channel (channel=%s)!", chData.chName));
+            throw new Exception(Sprintf.sprintf("DiaDat_DataFileImplicit.addChannel: dupplicated implicit channel (channel=%s)!", chData.chName));
         channel = new DiaDat_ChannelImplicit(this, chData);
         return channel;
     }
