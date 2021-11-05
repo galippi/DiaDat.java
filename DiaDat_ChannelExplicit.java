@@ -70,6 +70,8 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
                 return (int)(getValueRaw() * factor + offset);
             case e_DataType_i16:
                 return (int)(getValueRaw() * factor + offset);
+            case e_DataType_u32:
+                return (int)(getValueRaw() * factor + offset);
             case e_DataType_i32:
                 return (int)(getValueRaw() * factor + offset);
             default:
