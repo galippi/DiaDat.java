@@ -25,6 +25,11 @@ abstract public class DiaDat_ChannelBase
         return getValueRaw() * factor + offset;
     }
 
+    public int getValueInt() throws Exception
+    {
+        return (int)(getValueRaw() * factor + offset);
+    }
+
     public DataTypesEnum getType()
     {
         return type;
