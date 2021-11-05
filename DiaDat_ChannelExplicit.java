@@ -24,6 +24,12 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
             case e_DataType_u8:
             case e_DataType_u16:
                 return getValueRaw() * factor + offset;
+            case e_DataType_i16:
+                return getValueRaw() * factor + offset;
+            case e_DataType_u32:
+                return getValueRaw() * factor + offset;
+            case e_DataType_i32:
+                return getValueRaw() * factor + offset;
             case e_DataType_Real32:
                 return p.fin.get_float32(chIdx * type.size);
             case e_DataType_Real64:
