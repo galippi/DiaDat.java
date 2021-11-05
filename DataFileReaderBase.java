@@ -37,6 +37,14 @@ public class DataFileReaderBase
               (((int)record[idx + 1] & 0xFF) * 256);
     }
 
+    long get_u32(int idx)
+    {
+        return ((int)record[idx] & 0xFF) + 
+              (((int)record[idx + 1] & 0xFF) * 256) +
+              (((int)record[idx + 2] & 0xFF) * 65536) +
+              (((int)record[idx + 3] & 0xFF) * 16777216);
+    }
+
     double get_float32(int idx)
     {
         int rawVal = 0;
