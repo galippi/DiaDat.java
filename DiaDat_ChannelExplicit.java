@@ -43,6 +43,27 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
                 return p.fin.get_u8(chIdx);
             case e_DataType_u16:
                 return p.fin.get_u16(chIdx * type.size);
+            case e_DataType_i16:
+                return p.fin.get_u16(chIdx * type.size);
+            default:
+                throw new Exception("DiaDat_Channel.getValueRaw: Not yet implemented function for channel " + name + "!");
+        }
+    }
+
+    @Override
+    public int getValueInt() throws Exception
+    {
+        switch(type.typeId)
+        {
+            case e_DataType_u8:
+                return (int)(getValueRaw() * factor + offset);
+            case e_DataType_u16:
+                return (int)(getValueRaw() * factor + offset);
+            case e_DataType_i16:
+                int val = getValueRaw();
+                if (val >= 32768)
+                    val = val - 65536;
+                return (int)(val * factor + offset);
             default:
                 throw new Exception("DiaDat_Channel.getValueRaw: Not yet implemented function for channel " + name + "!");
         }
