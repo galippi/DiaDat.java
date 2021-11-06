@@ -5,6 +5,9 @@ public class DiaDat_ChannelExplicitInt extends DiaDat_ChannelBase {
     public DiaDat_ChannelExplicitInt(DiaDat_ChannelExplicit _channel)
     {
         channel = _channel;
+        name = _channel.getName();
+        factor = channel.factor;
+        offset = channel.offset;
     }
 
     @Override
@@ -22,6 +25,7 @@ public class DiaDat_ChannelExplicitInt extends DiaDat_ChannelBase {
         return channel.getValueRaw();
     }
 
+    @Override
     public double getValueDouble() throws Exception
     {
         return getValueRaw();
