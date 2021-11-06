@@ -8,6 +8,9 @@ public class DiaDat_ChannelExplicitInt extends DiaDat_ChannelBase {
         name = _channel.getName();
         factor = channel.factor;
         offset = channel.offset;
+        type = channel.getType();
+        parent = channel.parent;
+        unit = channel.unit;
     }
 
     @Override
