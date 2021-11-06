@@ -91,6 +91,23 @@ public class DiaDat_ChannelExplicit extends DiaDat_ChannelBase
         return parent.parent.numOfRecords;
     }
 
+    public boolean isInteger() {
+        switch(type.typeId)
+        {
+            case e_DataType_u8:
+            case e_DataType_u16:
+            case e_DataType_i16:
+            case e_DataType_u32:
+            case e_DataType_i32:
+                break;
+            default:
+                return false;
+        }
+        if ((Math.abs(offset) < 1e-12) && (Math.abs(factor - 1.00) < 1e-12))
+            return true;
+        return false;
+    }
+
     DataType type;
     int chIdx;
 }

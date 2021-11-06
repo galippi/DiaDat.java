@@ -1,6 +1,5 @@
 package diaDat;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,7 +30,12 @@ public class DiaDat_DataFile extends DiaDat_DataFileBase
         numOfSignals++;
         if (indexCheckIsEnabled && (chData.dataIdx != numOfSignals))
             throw new Exception(Sprintf.sprintf("DiaDat_DataFile.addChannel: wrong dataIdx (%d <-> %d) (channel=%s dataFileName=%s)!", chData.dataIdx, numOfSignals, chData.chName, dataFileName));
-        DiaDat_ChannelBase channel = new DiaDat_ChannelExplicit(this, chData);
+        DiaDat_ChannelExplicit channelExplicit = new DiaDat_ChannelExplicit(this, chData);
+        DiaDat_ChannelBase channel;
+        if (channelExplicit.isInteger())
+            channel = new DiaDat_ChannelExplicitInt(channelExplicit);
+        else
+            channel = channelExplicit;
         channels.put(chData.chName, channel);
         return channel;
     }
