@@ -40,6 +40,13 @@ abstract public class DiaDat_ChannelBase
         return name;
     }
 
+    public double getFactor() {
+        return factor;
+    }
+    public double getOffset() {
+        return offset;
+    }
+
     DiaDat_DataFileBase parent;
     String name;
     String unit;
