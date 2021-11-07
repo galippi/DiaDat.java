@@ -39,5 +39,9 @@ public class DiaDat_ChannelExplicitInt extends DiaDat_ChannelBase {
         return channel.getLength();
     }
 
+    public boolean isPureInt() {
+        return isPureParams();
+    }
+
     DiaDat_ChannelExplicit channel;
 }

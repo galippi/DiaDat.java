@@ -47,6 +47,14 @@ abstract public class DiaDat_ChannelBase
         return offset;
     }
 
+    public boolean isPureParams() {
+        return ((Math.abs(offset) < 1e-12) && (Math.abs(factor - 1.00) < 1e-12));
+    }
+
+    public boolean isPureInt() {
+        return false;
+    }
+
     DiaDat_DataFileBase parent;
     String name;
     String unit;
