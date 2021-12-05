@@ -55,6 +55,11 @@ abstract public class DiaDat_ChannelBase
         return false;
     }
 
+    public String getUnit()
+    {
+        return unit;
+    }
+
     DiaDat_DataFileBase parent;
     String name;
     String unit;
